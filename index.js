@@ -11,8 +11,11 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 var geometry = new THREE.DodecahedronGeometry();
-var material = new THREE.MeshLambertMaterial({ color: 0xdd0000 });
-var lineMaterial = new THREE.MeshBasicMaterial({ wireframe: true, color: 0x000000 });
+var material = new THREE.MeshPhongMaterial({ color: 0xdd0000, shading: THREE.FlatShading });
+var lineMaterial = new THREE.MeshBasicMaterial({
+    wireframe: true,
+    color: 0x000000
+});
 var cube = new THREE.Mesh( geometry, material );
 var lineCube = new THREE.Mesh( geometry, lineMaterial );
 scene.add( cube );
