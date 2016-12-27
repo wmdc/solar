@@ -14,7 +14,7 @@ var texture = new THREE.TextureLoader().load( "earth.jpg" );
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
 
-var geometry = new THREE.DodecahedronGeometry();
+var geometry = new THREE.SphereGeometry(1, 32, 32);
 var material = new THREE.MeshPhongMaterial({ map: texture });
 var lineMaterial = new THREE.MeshBasicMaterial({
     wireframe: true,
@@ -29,7 +29,7 @@ var ambLight = new THREE.AmbientLight(0x202020);
 scene.add(ambLight);
 
 var light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(0, 100, 50);
+light.position.set(100, 0, 50);
 scene.add(light);
 
 camera.position.z = 2;
@@ -37,11 +37,11 @@ camera.position.z = 2;
 var render = function () {
     requestAnimationFrame( render );
 
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+    // cube.rotation.x += 0.01;
+    // cube.rotation.y += 0.01;
 
-    lineCube.rotation.x += 0.01;
-    lineCube.rotation.y += 0.01;
+    // lineCube.rotation.x += 0.01;
+    // lineCube.rotation.y += 0.01;
 
     renderer.render(scene, camera);
 };
