@@ -10,8 +10,12 @@ var renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+var texture = new THREE.TextureLoader().load( "earth.jpg" );
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+
 var geometry = new THREE.DodecahedronGeometry();
-var material = new THREE.MeshPhongMaterial({ color: 0xdd0000, shading: THREE.FlatShading });
+var material = new THREE.MeshPhongMaterial({ map: texture });
 var lineMaterial = new THREE.MeshBasicMaterial({
     wireframe: true,
     color: 0x000000
@@ -28,7 +32,7 @@ var light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(0, 100, 50);
 scene.add(light);
 
-camera.position.z = 5;
+camera.position.z = 2;
 
 var render = function () {
     requestAnimationFrame( render );
