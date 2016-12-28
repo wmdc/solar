@@ -55,12 +55,6 @@ function adaptToWindowSize() {
 document.onkeydown = makeListener(true);
 document.onkeyup = makeListener(false);
 window.onresize = adaptToWindowSize;
-document.addEventListener( 'mousemove', function (event) {
-    event.preventDefault();
-    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-}, false );
-
 
 var scene = new THREE.Scene();
 scene.add(camera);
