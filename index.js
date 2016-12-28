@@ -3,10 +3,8 @@ var scene = new THREE.Scene();
 var aspect = window.innerWidth / window.innerHeight;
 
 var camera = new THREE.PerspectiveCamera(
-    45,
-    aspect,
-    1,
-    1000
+    50,
+    aspect
 );
 
 var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -25,21 +23,21 @@ var moonTexture = new THREE.TextureLoader().load("moon.jpg");
 moonTexture.wrapS = THREE.RepeatWrapping;
 moonTexture.wrapT = THREE.RepeatWrapping;
 
-var moonGeometry = new THREE.SphereGeometry(0.2, 16, 16);
-var moonMaterial = new THREE.MeshBasicMaterial({ map: skyTexture, side: THREE.DoubleSide });
+var moonGeometry = new THREE.SphereGeometry(0.6, 16, 16);
+var moonMaterial = new THREE.MeshBasicMaterial({ map: skyTexture });
 var moon = new THREE.Mesh(moonGeometry, moonMaterial);
+moon.position.x = 15;
 
-moon.position.x = 1.5;
+var moonPivot = new THREE.Object3D();
 
 var skyGeometry = new THREE.SphereGeometry(1.5, 16, 16);
 var skyMaterial = new THREE.MeshBasicMaterial({ map: skyTexture, side: THREE.DoubleSide });
 var sky = new THREE.Mesh(skyGeometry, skyMaterial);
 sky.position.z = -5;
 
-console.log(sky);
-scene.add(sky);
+// scene.add(sky);
 
-var geometry = new THREE.SphereGeometry(0.8, 128, 128);
+var geometry = new THREE.SphereGeometry(3, 32, 32);
 var material = new THREE.MeshPhongMaterial({ map: texture });
 var lineMaterial = new THREE.MeshBasicMaterial({
      wireframe: true,
@@ -48,9 +46,15 @@ var lineMaterial = new THREE.MeshBasicMaterial({
 
 var cube = new THREE.Mesh( geometry, material );
 var lineCube = new THREE.Mesh( geometry, lineMaterial );
+cube.position.z += 80;
 scene.add(cube);
-cube.add(moon);
+
+moonPivot.add(moon);
+cube.add(moonPivot);
 // scene.add( lineCube );
+
+var axis = new THREE.AxisHelper(10);
+scene.add(axis);
 
 var ambLight = new THREE.AmbientLight(0x404040);
 scene.add(ambLight);
@@ -71,7 +75,8 @@ var render = function () {
     
 //     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
-
+    moonPivot.rotation.y += 0.01;
+    
 //    lineCube.rotation.x += 0.01;
     lineCube.rotation.y += 0.001;
 
