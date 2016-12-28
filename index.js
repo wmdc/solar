@@ -1,4 +1,5 @@
 var SIZE_EARTH = 6;
+var SIZE_JUPITER = SIZE_EARTH * 11;
 var SIZE_MERCURY = SIZE_EARTH * 0.38;
 var SIZE_MOON = SIZE_EARTH * 0.27;
 var SIZE_SUN = SIZE_EARTH * 109 / 2; // reduce relative size
@@ -22,6 +23,7 @@ document.body.appendChild( renderer.domElement );
 
 var textures = {
     earth: new THREE.TextureLoader().load("earth.jpg"),
+    jupiter: new THREE.TextureLoader().load("jupiter.jpg"),
     mercury: new THREE.TextureLoader().load("mercury.jpg"),
     moon: new THREE.TextureLoader().load("moon.jpg"),
     sky: new THREE.TextureLoader().load("sky.jpg"),
@@ -30,6 +32,7 @@ var textures = {
 
 var materials = {
     earth: new THREE.MeshPhongMaterial({ map: textures.earth }),
+    jupiter: new THREE.MeshPhongMaterial({ color: 0x777777, map: textures.jupiter }),
     mercury: new THREE.MeshPhongMaterial({ map: textures.mercury }),
     moon: new THREE.MeshPhongMaterial({ color: 0xAAAAAA, map: textures.moon }),
     sky: new THREE.MeshBasicMaterial({ color: 0x444444,
@@ -62,6 +65,14 @@ var earthPivot = new THREE.Object3D();
 sun.add(earthPivot);
 earthPivot.add(earth);
 
+var jupiterGeometry = new THREE.SphereGeometry(SIZE_JUPITER, 32, 32);
+var jupiter = new THREE.Mesh( jupiterGeometry, materials.jupiter);
+jupiter.position.z = 230;
+jupiter.position.x = 230;
+var jupiterPivot = new THREE.Object3D();
+sun.add(jupiterPivot);
+jupiterPivot.add(jupiter);
+
 var mercuryGeometry = new THREE.SphereGeometry(SIZE_MERCURY, 32, 32);
 var mercury = new THREE.Mesh( mercuryGeometry, materials.mercury);
 mercury.position.z = 100;
@@ -90,6 +101,8 @@ var render = function () {
     sky.rotation.y += 0.0001; // fake galaxy rotation for interest
     earth.rotation.y += 0.01; // earth rotation around axis
     earthPivot.rotation.y += 0.003; // earth revolution around sun
+    jupiter.rotation.y += 0.01; // jupiter rotation around axis
+    jupiterPivot.rotation.y += 0.005; // jupiter revolution around sun
     mercury.rotation.y += 0.04; // mercury rotation around axis
     mercuryPivot.rotation.y += 0.01; // mercury revolution around sun
     moonPivot.rotation.y += 0.01; // moon revolution around earth
