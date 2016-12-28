@@ -30,12 +30,12 @@ moon.position.x = 15;
 
 var moonPivot = new THREE.Object3D();
 
-var skyGeometry = new THREE.SphereGeometry(1.5, 16, 16);
-var skyMaterial = new THREE.MeshBasicMaterial({ map: skyTexture, side: THREE.DoubleSide });
+var skyGeometry = new THREE.SphereGeometry(1000, 8, 8);
+var skyMaterial = new THREE.MeshBasicMaterial({ map: skyTexture, side: THREE.BackSide });
 var sky = new THREE.Mesh(skyGeometry, skyMaterial);
-sky.position.z = -5;
+sky.position.z = 0;
 
-// scene.add(sky);
+scene.add(sky);
 
 var geometry = new THREE.SphereGeometry(3, 32, 32);
 var material = new THREE.MeshPhongMaterial({ map: texture });
@@ -69,15 +69,9 @@ camera.position.z = 100;
 var render = function () {
     requestAnimationFrame( render );
 
-
-//    moon.rotation.x += 0.1;
-
-    
-//     cube.rotation.x += 0.01;
+    sky.rotation.y += 0.0001;
     cube.rotation.y += 0.01;
     moonPivot.rotation.y += 0.01;
-    
-//    lineCube.rotation.x += 0.01;
     lineCube.rotation.y += 0.001;
 
     renderer.render(scene, camera);
