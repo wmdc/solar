@@ -1,3 +1,6 @@
+var SIZE_EARTH = 3;
+var SIZE_MOON = SIZE_EARTH * 0.27;
+
 var scene = new THREE.Scene();
 
 var aspect = window.innerWidth / window.innerHeight;
@@ -25,7 +28,7 @@ var materials = {
     sun: undefined
 };
 
-var moonGeometry = new THREE.SphereGeometry(0.6, 16, 16);
+var moonGeometry = new THREE.SphereGeometry(SIZE_MOON, 16, 16);
 var moon = new THREE.Mesh(moonGeometry, materials.moon);
 moon.position.x = 10;
 
@@ -37,9 +40,9 @@ sky.position.z = 0;
 
 scene.add(sky);
 
-var geometry = new THREE.SphereGeometry(3, 32, 32);
 
-var earth = new THREE.Mesh( geometry, materials.earth);
+var earthGeometry = new THREE.SphereGeometry(SIZE_EARTH, 32, 32);
+var earth = new THREE.Mesh( earthGeometry, materials.earth);
 earth.position.z += 80;
 scene.add(earth);
 
