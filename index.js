@@ -6,6 +6,33 @@ var SIZE_SUN = SIZE_EARTH * 109 / 2; // reduce relative size
 
 var POSITION_SUN_Z = -300;
 
+var keys = {
+    up: false,
+    down: false,
+    left: false,
+    right: false
+};
+
+function makeListener(downListener) {
+    return function(e) {
+	if (e.keyCode == '38') {
+	    keys.up = downListener;
+	}
+	else if (e.keyCode == '40') {
+	    keys.down = downListener;
+	}
+	else if (e.keyCode == '37') {
+	    keys.left = downListener;
+	}
+	else if (e.keyCode == '39') {
+	    keys.right = downListener;
+	}
+    }
+}
+
+document.onkeydown = makeListener(true);
+document.onkeyup = makeListener(false);
+
 var scene = new THREE.Scene();
 
 var aspect = window.innerWidth / window.innerHeight;
@@ -107,6 +134,22 @@ var render = function () {
     mercuryPivot.rotation.y += 0.01; // mercury revolution around sun
     moonPivot.rotation.y += 0.01; // moon revolution around earth
 
+    if(keys.up) {
+	camera.position.z -= 1;
+    }
+
+    if(keys.down) {
+	camera.position.z += 1;
+    }
+
+    if(keys.left) {
+	camera.rotation.y += 0.02;
+    }
+
+    if(keys.right) {
+	camera.rotation.y -= 0.02;
+    }
+    
     renderer.render(scene, camera);
 };
 
