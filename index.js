@@ -1,6 +1,8 @@
-var SIZE_EARTH = 3;
+var SIZE_EARTH = 6;
 var SIZE_MOON = SIZE_EARTH * 0.27;
-var SIZE_SUN = SIZE_EARTH * 109;
+var SIZE_SUN = SIZE_EARTH * 109 / 2; // reduce relative size
+
+var POSITION_SUN_Z = -300;
 
 var scene = new THREE.Scene();
 
@@ -35,7 +37,7 @@ var materials = {
 
 var sunGeometry = new THREE.SphereGeometry(SIZE_SUN / 4, 64, 64);
 var sun = new THREE.Mesh(sunGeometry, materials.sun);
-sun.position.z = -300;
+sun.position.z = POSITION_SUN_Z;
 scene.add(sun);
 
 var moonGeometry = new THREE.SphereGeometry(SIZE_MOON, 16, 16);
@@ -50,7 +52,6 @@ sky.position.z = 0;
 
 scene.add(sky);
 
-
 var earthGeometry = new THREE.SphereGeometry(SIZE_EARTH, 32, 32);
 var earth = new THREE.Mesh( earthGeometry, materials.earth);
 earth.position.z = 300;
@@ -64,8 +65,8 @@ earth.add(moonPivot);
 var ambLight = new THREE.AmbientLight(0x404040);
 scene.add(ambLight);
 
-var light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(-100, 0, -10);
+var light = new THREE.PointLight(0xffffff, 1);
+light.position.z = POSITION_SUN_Z;
 scene.add(light);
 
 // doesn't matter as much for orthographic, as long as the scene is inside the clipping planes
@@ -77,7 +78,7 @@ var render = function () {
     sun.rotation.y += 0.0005; // approximate rotational effect on sun
     sky.rotation.y += 0.0001; // fake galaxy rotation for interest
     earth.rotation.y += 0.01; // earth rotation around axis
-    earthPivot.rotation.y += 0.01; // earth revolution around sun
+    earthPivot.rotation.y += 0.003; // earth revolution around sun
     moonPivot.rotation.y += 0.01; // moon revolution around earth
 
     renderer.render(scene, camera);
