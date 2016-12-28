@@ -40,22 +40,27 @@ function makeListener(downListener) {
     }
 }
 
-document.onkeydown = makeListener(true);
-document.onkeyup = makeListener(false);
-
-var scene = new THREE.Scene();
-
-var aspect = window.innerWidth / window.innerHeight;
-
 var camera = new THREE.PerspectiveCamera(
     50,
-    aspect,
+    1,
     0.1,
     10000
 );
-
 var renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize( window.innerWidth, window.innerHeight );
+
+
+function adaptToWindowSize() {
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+}
+
+document.onkeydown = makeListener(true);
+document.onkeyup = makeListener(false);
+window.onresize = adaptToWindowSize;
+
+var scene = new THREE.Scene();
+adaptToWindowSize();
 document.body.appendChild( renderer.domElement );
 
 var textures = {
