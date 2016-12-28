@@ -1,8 +1,10 @@
 var SIZE_EARTH = 6;
 var SIZE_JUPITER = SIZE_EARTH * 11;
+var SIZE_GANYMEDE = SIZE_EARTH * 0.41;
 var SIZE_MERCURY = SIZE_EARTH * 0.38;
 var SIZE_MOON = SIZE_EARTH * 0.27;
 var SIZE_SUN = SIZE_EARTH * 109 / 2; // reduce relative size
+
 
 var POSITION_SUN_Z = -300;
 
@@ -12,6 +14,14 @@ var keys = {
     left: false,
     right: false
 };
+
+// Camera vertical and horizontal displacement
+var camDisplacement = {
+    vertical: 0,
+    horizontal: 0
+};
+
+var CAM_DISTANCE = 600;
 
 function makeListener(downListener) {
     return function(e) {
@@ -50,6 +60,7 @@ document.body.appendChild( renderer.domElement );
 
 var textures = {
     earth: new THREE.TextureLoader().load("earth.jpg"),
+    ganymede: new THREE.TextureLoader().load("ganymede.jpg"),
     jupiter: new THREE.TextureLoader().load("jupiter.jpg"),
     mercury: new THREE.TextureLoader().load("mercury.jpg"),
     moon: new THREE.TextureLoader().load("moon.jpg"),
@@ -59,6 +70,7 @@ var textures = {
 
 var materials = {
     earth: new THREE.MeshPhongMaterial({ map: textures.earth }),
+    ganymede: new THREE.MeshPhongMaterial({ map: textures.ganymede }),
     jupiter: new THREE.MeshPhongMaterial({ color: 0x777777, map: textures.jupiter }),
     mercury: new THREE.MeshPhongMaterial({ map: textures.mercury }),
     moon: new THREE.MeshPhongMaterial({ color: 0xAAAAAA, map: textures.moon }),
@@ -94,11 +106,19 @@ earthPivot.add(earth);
 
 var jupiterGeometry = new THREE.SphereGeometry(SIZE_JUPITER, 32, 32);
 var jupiter = new THREE.Mesh( jupiterGeometry, materials.jupiter);
-jupiter.position.z = 230;
-jupiter.position.x = 230;
+jupiter.position.z = 250;
+jupiter.position.x = 250;
 var jupiterPivot = new THREE.Object3D();
 sun.add(jupiterPivot);
 jupiterPivot.add(jupiter);
+
+var ganymedeGeometry = new THREE.SphereGeometry(SIZE_GANYMEDE, 16, 16);
+var ganymede = new THREE.Mesh(ganymedeGeometry, materials.ganymede);
+ganymede.position.x = 120;
+
+var ganymedePivot = new THREE.Object3D();
+ganymedePivot.add(ganymede);
+jupiter.add(ganymedePivot);
 
 var mercuryGeometry = new THREE.SphereGeometry(SIZE_MERCURY, 32, 32);
 var mercury = new THREE.Mesh( mercuryGeometry, materials.mercury);
@@ -135,20 +155,30 @@ var render = function () {
     moonPivot.rotation.y += 0.01; // moon revolution around earth
 
     if(keys.up) {
-	camera.position.z -= 1;
+	camDisplacement.vertical += Math.PI / 100;
     }
 
     if(keys.down) {
-	camera.position.z += 1;
+	camDisplacement.vertical -= Math.PI / 100;
     }
 
     if(keys.left) {
-	camera.rotation.y += 0.02;
+	camDisplacement.horizontal -= Math.PI / 100;
     }
 
     if(keys.right) {
-	camera.rotation.y -= 0.02;
+	camDisplacement.horizontal += Math.PI / 100;
     }
+
+    camDisplacement.vertical = camDisplacement.vertical % (Math.PI * 2);
+    camDisplacement.horizontal = camDisplacement.horizontal % (Math.PI * 2);
+
+    camera.position.x = CAM_DISTANCE * Math.sin(camDisplacement.horizontal);
+    camera.position.y = CAM_DISTANCE * Math.sin(camDisplacement.vertical);
+    camera.position.z = CAM_DISTANCE * ( - Math.cos(camDisplacement.horizontal) + Math.cos(camDisplacement.vertical));
+    camera.lookAt(0, 0, 0);
+    
+    console.log(camDisplacement.horizontal);
     
     renderer.render(scene, camera);
 };
