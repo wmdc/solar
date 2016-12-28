@@ -158,11 +158,11 @@ var render = function () {
     mercuryPivot.rotation.y += 0.01; // mercury revolution around sun
     moonPivot.rotation.y += 0.01; // moon revolution around earth
 
-    if(keys.up) {
+    if(keys.up && camDisplacement.vertical < 0.98 * Math.PI/2) {
 	camDisplacement.vertical += Math.PI / 100;
     }
 
-    if(keys.down) {
+    if(keys.down && camDisplacement.vertical > 0.98 * -Math.PI/2) {
 	camDisplacement.vertical -= Math.PI / 100;
     }
 
@@ -174,11 +174,11 @@ var render = function () {
 	camDisplacement.horizontal += Math.PI / 100;
     }
 
-    camDisplacement.vertical = camDisplacement.vertical % (Math.PI * 2);
     camDisplacement.horizontal = camDisplacement.horizontal % (Math.PI * 2);
 
-    camera.position.x = CAM_DISTANCE * Math.sin(camDisplacement.horizontal);
-    camera.position.z = CAM_DISTANCE * ( - Math.cos(camDisplacement.horizontal));
+    camera.position.x = CAM_DISTANCE * (Math.sin(camDisplacement.horizontal) * Math.abs(1 - Math.sin(camDisplacement.vertical)));
+    camera.position.y = CAM_DISTANCE * Math.sin(camDisplacement.vertical);
+    camera.position.z = CAM_DISTANCE * ( - Math.cos(camDisplacement.horizontal) * Math.abs(1 - Math.sin(camDisplacement.vertical)));
     camera.lookAt(scene.position);
     
     renderer.render(scene, camera);
