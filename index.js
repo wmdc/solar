@@ -24,7 +24,9 @@ var textures = {
 var materials = {
     earth: new THREE.MeshPhongMaterial({ map: textures.earth }),
     moon: new THREE.MeshPhongMaterial({ map: textures.moon }),
-    sky: new THREE.MeshBasicMaterial({ map: textures.sky, side: THREE.BackSide }),
+    sky: new THREE.MeshBasicMaterial({ color: 0x444444,
+				       map: textures.sky,
+				       side: THREE.BackSide }),
     sun: undefined
 };
 
