@@ -1,5 +1,6 @@
 var SIZE_EARTH = 3;
 var SIZE_MOON = SIZE_EARTH * 0.27;
+var SIZE_SUN = SIZE_EARTH * 109;
 
 var scene = new THREE.Scene();
 
@@ -7,7 +8,9 @@ var aspect = window.innerWidth / window.innerHeight;
 
 var camera = new THREE.PerspectiveCamera(
     50,
-    aspect
+    aspect,
+    0.1,
+    10000
 );
 
 var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -23,12 +26,17 @@ var textures = {
 
 var materials = {
     earth: new THREE.MeshPhongMaterial({ map: textures.earth }),
-    moon: new THREE.MeshPhongMaterial({ map: textures.moon }),
+    moon: new THREE.MeshPhongMaterial({ color: 0xAAAAAA, map: textures.moon }),
     sky: new THREE.MeshBasicMaterial({ color: 0x444444,
 				       map: textures.sky,
 				       side: THREE.BackSide }),
-    sun: undefined
+    sun: new THREE.MeshBasicMaterial({ map: textures.sun })
 };
+
+var sunGeometry = new THREE.SphereGeometry(SIZE_SUN / 4, 64, 64);
+var sun = new THREE.Mesh(sunGeometry, materials.sun);
+sun.position.z = -300;
+scene.add(sun);
 
 var moonGeometry = new THREE.SphereGeometry(SIZE_MOON, 16, 16);
 var moon = new THREE.Mesh(moonGeometry, materials.moon);
@@ -45,14 +53,13 @@ scene.add(sky);
 
 var earthGeometry = new THREE.SphereGeometry(SIZE_EARTH, 32, 32);
 var earth = new THREE.Mesh( earthGeometry, materials.earth);
-earth.position.z += 80;
-scene.add(earth);
+earth.position.z = 300;
+var earthPivot = new THREE.Object3D();
+sun.add(earthPivot);
+earthPivot.add(earth);
 
 moonPivot.add(moon);
 earth.add(moonPivot);
-
-var axis = new THREE.AxisHelper(10);
-scene.add(axis);
 
 var ambLight = new THREE.AmbientLight(0x404040);
 scene.add(ambLight);
@@ -67,9 +74,11 @@ camera.position.z = 100;
 var render = function () {
     requestAnimationFrame( render );
 
-    sky.rotation.y += 0.0001;
-    earth.rotation.y += 0.01;
-    moonPivot.rotation.y += 0.01;
+    sun.rotation.y += 0.0005; // approximate rotational effect on sun
+    sky.rotation.y += 0.0001; // fake galaxy rotation for interest
+    earth.rotation.y += 0.01; // earth rotation around axis
+    earthPivot.rotation.y += 0.01; // earth revolution around sun
+    moonPivot.rotation.y += 0.01; // moon revolution around earth
 
     renderer.render(scene, camera);
 };
