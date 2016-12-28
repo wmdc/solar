@@ -5,9 +5,6 @@ var SIZE_MERCURY = SIZE_EARTH * 0.38;
 var SIZE_MOON = SIZE_EARTH * 0.27;
 var SIZE_SUN = SIZE_EARTH * 109 / 2; // reduce relative size
 
-
-var POSITION_SUN_Z = -300;
-
 var keys = {
     up: false,
     down: false,
@@ -58,8 +55,15 @@ function adaptToWindowSize() {
 document.onkeydown = makeListener(true);
 document.onkeyup = makeListener(false);
 window.onresize = adaptToWindowSize;
+document.addEventListener( 'mousemove', function (event) {
+    event.preventDefault();
+    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}, false );
+
 
 var scene = new THREE.Scene();
+scene.add(camera);
 adaptToWindowSize();
 document.body.appendChild( renderer.domElement );
 
@@ -87,7 +91,6 @@ var materials = {
 
 var sunGeometry = new THREE.SphereGeometry(SIZE_SUN / 4, 64, 64);
 var sun = new THREE.Mesh(sunGeometry, materials.sun);
-sun.position.z = POSITION_SUN_Z;
 scene.add(sun);
 
 var moonGeometry = new THREE.SphereGeometry(SIZE_MOON, 16, 16);
@@ -140,11 +143,7 @@ var ambLight = new THREE.AmbientLight(0x404040);
 scene.add(ambLight);
 
 var light = new THREE.PointLight(0xffffff, 1);
-light.position.z = POSITION_SUN_Z;
 scene.add(light);
-
-// doesn't matter as much for orthographic, as long as the scene is inside the clipping planes
-camera.position.z = 100;
 
 var render = function () {
     requestAnimationFrame( render );
@@ -179,11 +178,8 @@ var render = function () {
     camDisplacement.horizontal = camDisplacement.horizontal % (Math.PI * 2);
 
     camera.position.x = CAM_DISTANCE * Math.sin(camDisplacement.horizontal);
-    camera.position.y = CAM_DISTANCE * Math.sin(camDisplacement.vertical);
-    camera.position.z = CAM_DISTANCE * ( - Math.cos(camDisplacement.horizontal) + Math.cos(camDisplacement.vertical));
-    camera.lookAt(0, 0, 0);
-    
-    console.log(camDisplacement.horizontal);
+    camera.position.z = CAM_DISTANCE * ( - Math.cos(camDisplacement.horizontal));
+    camera.lookAt(scene.position);
     
     renderer.render(scene, camera);
 };
