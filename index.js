@@ -80,9 +80,9 @@ var textures = {
 };
 
 var materials = {
-    earth: new THREE.MeshPhongMaterial({ map: textures.earth }),
+    earth: new THREE.MeshPhongMaterial({ map: textures.earth, shininess: 10 }),
     ganymede: new THREE.MeshPhongMaterial({ map: textures.ganymede }),
-    jupiter: new THREE.MeshPhongMaterial({ color: 0x777777, map: textures.jupiter }),
+    jupiter: new THREE.MeshPhongMaterial({ color: 0x777777, map: textures.jupiter, shininess: 5 }),
     mercury: new THREE.MeshPhongMaterial({ map: textures.mercury }),
     moon: new THREE.MeshPhongMaterial({ color: 0xAAAAAA, map: textures.moon }),
     sky: new THREE.MeshBasicMaterial({ color: 0x444444,
