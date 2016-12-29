@@ -170,9 +170,14 @@ var render = function () {
 
     camDisplacement.horizontal = camDisplacement.horizontal % (Math.PI * 2);
 
-    camera.position.x = CAM_DISTANCE * (Math.sin(camDisplacement.horizontal) * Math.abs(1 - Math.sin(camDisplacement.vertical)));
+    camera.position.x = CAM_DISTANCE *
+	Math.cos(camDisplacement.vertical) *
+	Math.sin(camDisplacement.horizontal);
+    camera.position.z = CAM_DISTANCE *
+	Math.cos(camDisplacement.vertical) *
+	( - Math.cos(camDisplacement.horizontal));
     camera.position.y = CAM_DISTANCE * Math.sin(camDisplacement.vertical);
-    camera.position.z = CAM_DISTANCE * ( - Math.cos(camDisplacement.horizontal) * Math.abs(1 - Math.sin(camDisplacement.vertical)));
+
     camera.lookAt(scene.position);
     
     renderer.render(scene, camera);
