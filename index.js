@@ -97,7 +97,7 @@ moon.position.x = 10;
 
 var moonPivot = new THREE.Object3D();
 
-var skyGeometry = new THREE.SphereGeometry(1000, 8, 8);
+var skyGeometry = new THREE.SphereGeometry(5000, 8, 8);
 var sky = new THREE.Mesh(skyGeometry, materials.sky);
 sky.position.z = 0;
 
@@ -112,8 +112,8 @@ earthPivot.add(earth);
 
 var jupiterGeometry = new THREE.SphereGeometry(SIZE_JUPITER, 32, 32);
 var jupiter = new THREE.Mesh( jupiterGeometry, materials.jupiter);
-jupiter.position.z = 250;
-jupiter.position.x = 250;
+jupiter.position.z = 600;
+jupiter.position.x = 600;
 var jupiterPivot = new THREE.Object3D();
 sun.add(jupiterPivot);
 jupiterPivot.add(jupiter);
