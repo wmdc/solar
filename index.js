@@ -5,6 +5,10 @@ var SIZE_MERCURY = SIZE_EARTH * 0.38;
 var SIZE_MOON = SIZE_EARTH * 0.27;
 var SIZE_SUN = SIZE_EARTH * 109 / 2; // reduce relative size
 
+var stats = new Stats();
+
+document.body.appendChild(stats.domElement);
+
 var keys = {
     up: false,
     down: false,
@@ -181,6 +185,8 @@ var render = function () {
     camera.lookAt(scene.position);
     
     renderer.render(scene, camera);
+
+    stats.update();
 };
 
 render();
