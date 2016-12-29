@@ -13,7 +13,9 @@ var keys = {
     up: false,
     down: false,
     left: false,
-    right: false
+    right: false,
+    plus: false,
+    minus: false
 };
 
 // Camera vertical and horizontal displacement
@@ -23,20 +25,22 @@ var camDisplacement = {
 };
 
 var CAM_DISTANCE = 600;
+var distance = CAM_DISTANCE;
 
 function makeListener(downListener) {
     return function(e) {
 	if (e.keyCode == '38') {
 	    keys.up = downListener;
-	}
-	else if (e.keyCode == '40') {
+	} else if (e.keyCode == '40') {
 	    keys.down = downListener;
-	}
-	else if (e.keyCode == '37') {
+	} else if (e.keyCode == '37') {
 	    keys.left = downListener;
-	}
-	else if (e.keyCode == '39') {
+	} else if (e.keyCode == '39') {
 	    keys.right = downListener;
+	} else if (e.keyCode == 187) {
+	    keys.plus = downListener;
+	} else if (e.keyCode == 189) {
+	    keys.minus = downListener;
 	}
     }
 }
@@ -156,31 +160,39 @@ var render = function () {
     mercuryPivot.rotation.y += 0.01; // mercury revolution around sun
     moonPivot.rotation.y += 0.01; // moon revolution around earth
 
-    if(keys.up && camDisplacement.vertical < 0.98 * Math.PI/2) {
+    if (keys.up && camDisplacement.vertical < 0.98 * Math.PI/2) {
 	camDisplacement.vertical += Math.PI / 100;
     }
 
-    if(keys.down && camDisplacement.vertical > 0.98 * -Math.PI/2) {
+    if (keys.down && camDisplacement.vertical > 0.98 * -Math.PI/2) {
 	camDisplacement.vertical -= Math.PI / 100;
     }
 
-    if(keys.left) {
+    if (keys.left) {
 	camDisplacement.horizontal -= Math.PI / 100;
     }
 
-    if(keys.right) {
+    if (keys.right) {
 	camDisplacement.horizontal += Math.PI / 100;
+    }
+
+    if (keys.plus) {
+	distance *= 1.01;
+    }
+
+    if (keys.minus) {
+	distance /= 1.01;
     }
 
     camDisplacement.horizontal = camDisplacement.horizontal % (Math.PI * 2);
 
-    camera.position.x = CAM_DISTANCE *
+    camera.position.x = distance *
 	Math.cos(camDisplacement.vertical) *
 	Math.sin(camDisplacement.horizontal);
-    camera.position.z = CAM_DISTANCE *
+    camera.position.z = distance *
 	Math.cos(camDisplacement.vertical) *
 	( - Math.cos(camDisplacement.horizontal));
-    camera.position.y = CAM_DISTANCE * Math.sin(camDisplacement.vertical);
+    camera.position.y = distance * Math.sin(camDisplacement.vertical);
 
     camera.lookAt(scene.position);
     
