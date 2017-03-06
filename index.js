@@ -53,6 +53,8 @@ var camera = new THREE.PerspectiveCamera(
 );
 var renderer = new THREE.WebGLRenderer({ antialias: true });
 
+var effect = new THREE.StereoEffect( renderer );
+effect.setSize( window.innerWidth, window.innerHeight );
 
 function adaptToWindowSize() {
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -195,8 +197,8 @@ var render = function () {
     camera.position.y = distance * Math.sin(camDisplacement.vertical);
 
     camera.lookAt(scene.position);
-    
-    renderer.render(scene, camera);
+
+    effect.render(scene, camera);
 
     stats.update();
 };
