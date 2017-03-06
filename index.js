@@ -1,3 +1,25 @@
+/*
+ * Full screen mode script courtesy of Mozilla
+ */
+function toggleFullScreen() {
+    var doc = window.document;
+    var docEl = doc.documentElement;
+
+    var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+    if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+	requestFullScreen.call(docEl);
+    }
+    else {
+	cancelFullScreen.call(doc);
+    }
+}
+
+var goFS = document.body.addEventListener("click", function() {
+   toggleFullScreen();
+}, false);
+
 var SIZE_EARTH = 6;
 var SIZE_JUPITER = SIZE_EARTH * 11;
 var SIZE_GANYMEDE = SIZE_EARTH * 0.41;
